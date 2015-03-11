@@ -15,7 +15,11 @@
     "require": {},
     "autoload": {
         "psr-4": {
-            "PHPRocks\\": "core/PHPRocks",
+            "PHPRocks\\": "core/PHPRocks"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
             "PHPRocks\\Test\\": "tests/PHPRocks"
         }
     }
