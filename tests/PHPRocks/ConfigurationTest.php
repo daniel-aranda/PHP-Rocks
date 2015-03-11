@@ -37,6 +37,14 @@ class ConfigurationTest extends Base
         $this->assertInstanceOf('\PHPRocks\Configuration', $instance);
     }
 
+    public function testInstance()
+    {
+        $path = $this->getFixturesDirectory() . 'configuration_test.json';
+        $instance = Configuration::instance( $path );
+
+        $this->assertInstanceOf('\PHPRocks\Configuration', $instance);
+    }
+
     public function testDependencyFactory()
     {
         $instance = DependencyManager::get('\PHPRocks\Configuration');
