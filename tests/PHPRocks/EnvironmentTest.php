@@ -17,7 +17,7 @@ class EnvironmentTest extends Base
     private $environment;
 
     protected function setUp(){
-        $this->environment = Environment::factory();
+        $this->environment = Environment::factory(true);
     }
 
     public function testDomain(){

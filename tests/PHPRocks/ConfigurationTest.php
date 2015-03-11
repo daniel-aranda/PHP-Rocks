@@ -22,7 +22,7 @@ class ConfigurationTest extends Base
     protected function setUp()
     {
         $path = $this->getFixturesDirectory() . 'configuration_test.json';
-        $this->config = Configuration::factory( $path );
+        $this->config = Configuration::factory( $path, Environment::factory(true) );
     }
 
     protected function tearDown()
@@ -109,7 +109,7 @@ class ConfigurationTest extends Base
 
         $data = [];
 
-        $config = new Configuration($data, Environment::factory());
+        $config = new Configuration($data, Environment::factory(true));
 
         $config->environment();
 

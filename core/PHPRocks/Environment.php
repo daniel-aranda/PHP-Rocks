@@ -37,10 +37,10 @@ final class Environment{
     /**
      * @return Environment
      */
-    public static function factory(){
+    public static function factory($unit_test = false){
         $instance = new Environment(
             new OptionableArray($_SERVER),
-            defined('PHPUNIT_PHPRocks'),
+            $unit_test,
             php_sapi_name()
         );
 
