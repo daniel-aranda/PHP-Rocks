@@ -1,5 +1,5 @@
 {
-    "name": "danielaranda/PHP-Rocks",
+    "name": "danielaranda/php-rocks",
     "description": "PHP Rocks :: Fat Free Framework",
     "require-dev": {
         "phpunit/phpunit": "~4.5"
