@@ -23,7 +23,8 @@ final class Configuration{
     private $environment;
 
     /**
-     * @param \PHPRocks\Configuration $path
+     * @param null | string $path
+     * @return \PHPRocks\Configuration
      */
     public static function instance($path = null){
         $instance = DependencyManager::get(
