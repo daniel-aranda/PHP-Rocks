@@ -23,7 +23,7 @@ final class Configuration{
     private $environment;
 
     /**
-     * @param self $path
+     * @param \PHPRocks\Configuration $path
      */
     public static function instance($path = null){
         $instance = DependencyManager::get(
@@ -35,7 +35,7 @@ final class Configuration{
     }
 
     /**
-     * @return self
+     * @return \PHPRocks\Configuration
      */
     public static function factory(
         $path = null,
