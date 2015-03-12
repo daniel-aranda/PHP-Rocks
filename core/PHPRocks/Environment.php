@@ -35,6 +35,21 @@ final class Environment{
     }
 
     /**
+     * @param $unit_test
+     * @return \PHPRocks\Environment
+     */
+    public static function instance($unit_test){
+        $instance = DependencyManager::get(
+            '\PHPRocks\Environment',
+            [
+                $unit_test
+            ]
+        );
+
+        return $instance;
+    }
+
+    /**
      * @return Environment
      */
     public static function factory($unit_test = false){
