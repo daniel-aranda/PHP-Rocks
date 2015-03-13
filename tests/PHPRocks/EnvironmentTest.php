@@ -20,11 +20,6 @@ class EnvironmentTest extends Base
         $this->environment = Environment::factory(true);
     }
 
-    public function testInstance()
-    {
-        $this->assertInstanceOf('\PHPRocks\Environment', Environment::instance());
-    }
-
     public function testDomain(){
         $this->assertSame(Environment::UNIT_TEST, $this->environment->domain());
         $this->assertTrue($this->environment->isIsUnitTest());
