@@ -16,7 +16,7 @@ class JSON
      * @param int $depth
      */
     public static function encode($value, $options = 0, $depth = 512){
-        $json = @json_encode($value, $options, $depth);
+        $json = json_encode($value, $options, $depth);
 
         if( json_last_error() !== JSON_ERROR_NONE ){
             throw new \PHPRocks\Exception\Util\JSON(var_export($value, true), 'encode', static::lastError());
@@ -32,7 +32,7 @@ class JSON
      * @param int $options
      */
     public static function decode($json, $assoc = false, $depth = 512, $options = 0){
-        $data = @json_decode($json, $assoc, $depth, $options);
+        $data = json_decode($json, $assoc, $depth, $options);
 
         if( json_last_error() !== JSON_ERROR_NONE ){
             throw new \PHPRocks\Exception\Util\JSON($json, 'decode', static::lastError());
