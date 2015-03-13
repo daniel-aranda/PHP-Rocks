@@ -19,7 +19,7 @@ class JSON
         $json = @json_encode($value, $options, $depth);
 
         if( json_last_error() !== JSON_ERROR_NONE ){
-            throw new \PHPRocks\Exception\Util\JSON(var_export($value, true), 'encode', json_last_error_msg ());
+            throw new \PHPRocks\Exception\Util\JSON(var_export($value, true), 'encode', static::lastError());
         }
 
         return $json;
@@ -35,10 +35,14 @@ class JSON
         $data = @json_decode($json, $assoc, $depth, $options);
 
         if( json_last_error() !== JSON_ERROR_NONE ){
-            throw new \PHPRocks\Exception\Util\JSON($json, 'decode', json_last_error_msg ());
+            throw new \PHPRocks\Exception\Util\JSON($json, 'decode', static::lastError());
         }
 
         return $data;
+    }
+
+    private static function lastError(){
+        return function_exists('json_last_error_msg') ? json_last_error_msg() : '';
     }
 
 }
