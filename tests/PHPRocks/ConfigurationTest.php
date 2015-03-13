@@ -19,10 +19,15 @@ class ConfigurationTest extends Base
      */
     private $config;
 
+    /**
+     * @var string
+     */
+    private $path;
+
     protected function setUp()
     {
-        $path = $this->getFixturesDirectory() . 'configuration_test.json';
-        $this->config = Configuration::factory( $path, Environment::factory(true) );
+        $this->path = $this->getFixturesDirectory() . 'configuration_test.json';
+        $this->config = Configuration::factory( $this->path, Environment::factory(true) );
     }
 
     protected function tearDown()
@@ -31,23 +36,23 @@ class ConfigurationTest extends Base
 
     public function testFactory()
     {
-        $path = $this->getFixturesDirectory() . 'configuration_test.json';
-        $instance = Configuration::factory( $path );
+        $this->path = $this->getFixturesDirectory() . 'configuration_test.json';
+        $instance = Configuration::factory( $this->path );
 
         $this->assertInstanceOf('\PHPRocks\Configuration', $instance);
     }
 
     public function testInstance()
     {
-        $path = $this->getFixturesDirectory() . 'configuration_test.json';
-        $instance = Configuration::instance( $path );
+        $this->path = $this->getFixturesDirectory() . 'configuration_test.json';
+        $instance = Configuration::instance( $this->path );
 
         $this->assertInstanceOf('\PHPRocks\Configuration', $instance);
     }
 
     public function testDependencyFactory()
     {
-        $instance = DependencyManager::get('\PHPRocks\Configuration');
+        $instance = DependencyManager::get('\PHPRocks\Configuration', [$this->path]);
         $this->assertInstanceOf('\PHPRocks\Configuration', $instance);
         DependencyManager::reset();
     }
@@ -84,8 +89,6 @@ class ConfigurationTest extends Base
 
     public function testEnvironmentIsSandbox(){
 
-        $path = $this->getFixturesDirectory() . 'configuration_test.json';
-
         $custom_environment = new Environment(
             new OptionableArray([
                 'SERVER_NAME' => 'sandbox.daniel-aranda.com'
@@ -95,7 +98,7 @@ class ConfigurationTest extends Base
         );
 
         $config = Configuration::factory(
-            $path,
+            $this->path,
             $custom_environment
         );
 
@@ -107,9 +110,18 @@ class ConfigurationTest extends Base
 
         $this->setExpectedException('PHPRocks\Exception\Configuration\ValueNotSet');
 
-        $data = [];
+        $path = $this->getFixturesDirectory() . 'empty_configuration.json';
+        $config = new Configuration($path, Environment::factory(true));
 
-        $config = new Configuration($data, Environment::factory(true));
+        $config->environment();
+
+    }
+
+    public function testInvalidPath(){
+
+        $this->setExpectedException('PHPRocks\Exception\Configuration\InvalidPath');
+
+        $config = new Configuration('randompath', Environment::factory(true));
 
         $config->environment();
 
@@ -118,8 +130,6 @@ class ConfigurationTest extends Base
     public function testEnvironmentNotFound(){
 
         $this->setExpectedException('PHPRocks\Exception\Configuration\EnvironmentNotFound');
-
-        $path = $this->getFixturesDirectory() . 'configuration_test.json';
 
         $custom_environment = new Environment(
             new OptionableArray([
@@ -130,7 +140,7 @@ class ConfigurationTest extends Base
         );
 
         $config = Configuration::factory(
-            $path,
+            $this->path,
             $custom_environment
         );
 
@@ -142,8 +152,6 @@ class ConfigurationTest extends Base
 
         $this->setExpectedException('PHPRocks\Exception\Configuration\InvalidEnvironment');
 
-        $path = $this->getFixturesDirectory() . 'configuration_test.json';
-
         $custom_environment = new Environment(
             new OptionableArray([
                 'SERVER_NAME' => 'sandbox.random.com'
@@ -153,7 +161,7 @@ class ConfigurationTest extends Base
         );
 
         $config = Configuration::factory(
-            $path,
+            $this->path,
             $custom_environment
         );
 
@@ -177,67 +185,3 @@ class ConfigurationTest extends Base
     }
 
 }
-/*
-
-    public function testGetPerEnvironment(){
-
-        $data = [
-            "environments" => [
-                "sandbox" => [
-                    "sandbox.dealerx.com",
-                    "localhost"
-                ],
-                "unit_test" => [
-                    "unit_test"
-                ]
-            ],
-            "db" => [
-                "default" => [
-                    "data_source_name" => "firebase"
-                ],
-                "production" => [
-                    "data_source_name" => "mysql"
-                ],
-                "unit_test" => [
-                    "data_source_name" => "sqlite:memory"
-                ]
-            ]
-        ];
-
-        $this->config = new RESTful_Config($data);
-
-        $db = $this->config->get_per_environment('db');
-
-        $this->assertSame(['data_source_name' => 'sqlite:memory'], $db);
-    }
-
-    public function testGetPerEnvironmentDefault(){
-
-        $data = [
-            "environments" => [
-                "sandbox" => [
-                    "sandbox.dealerx.com",
-                    "localhost"
-                ],
-                "unit_test" => [
-                    "unit_test"
-                ]
-            ],
-            "db" => [
-                "default" => [
-                    "data_source_name" => "firebase"
-                ],
-                "production" => [
-                    "data_source_name" => "mysql"
-                ]
-            ]
-        ];
-
-        $this->config = new RESTful_Config($data);
-
-        $db = $this->config->get_per_environment('db');
-
-        $this->assertSame(['data_source_name' => 'firebase'], $db);
-    }
-
-}*/

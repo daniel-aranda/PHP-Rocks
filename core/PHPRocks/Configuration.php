@@ -1,8 +1,10 @@
 <?php
 namespace PHPRocks;
+use PHPRocks\Exception\Configuration\InvalidPath;
 use PHPRocks\Exception\Configuration\ValueNotSet;
 use PHPRocks\Exception\Configuration\InvalidEnvironment;
 use PHPRocks\Exception\Configuration\EnvironmentNotFound;
+use PHPRocks\Util\JSON;
 
 /**
  * PHP Rocks :: Fat Free Framework
@@ -18,6 +20,11 @@ final class Configuration{
     private $data;
 
     /**
+     * @var string
+     */
+    private $path;
+
+    /**
      * @var \PHPRocks\Environment
      */
     private $environment;
@@ -27,7 +34,7 @@ final class Configuration{
      * @return \PHPRocks\Configuration
      */
     public static function instance(
-        $path = null,
+        $path,
         Environment $environment = null
     ){
         $instance = DependencyManager::get(
@@ -45,23 +52,16 @@ final class Configuration{
      * @return \PHPRocks\Configuration
      */
     public static function factory(
-        $path = null,
+        $path,
         Environment $environment = null
     ){
-
-        if( is_null($path) ){
-            //TODO: make this required, so throw Exception if not set
-            $path = 'PHPRocks-configuration.json';
-        }
 
         if( is_null($environment) ){
             $environment = Environment::factory();
         }
 
-        $file_content = file_get_contents($path);
-
         $data = new Configuration(
-            json_decode($file_content, true),
+            $path,
             $environment
         );
 
@@ -69,11 +69,24 @@ final class Configuration{
     }
 
     public function __construct(
-        array $data,
+        $path,
         Environment $environment
     ){
-        $this->data = $data;
+        $this->path = $path;
         $this->environment = $environment;
+
+        $this->invalidateData();
+    }
+
+    private function invalidateData(){
+
+        if( !is_file($this->path) || !is_readable($this->path) ){
+            throw new InvalidPath($this->path);
+        }
+
+        $file_content = file_get_contents($this->path);
+
+        $this->data = JSON::decode($file_content, true);
     }
 
     public function environment(){
