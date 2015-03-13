@@ -1,6 +1,7 @@
 <?php
 namespace PHPRocks\Test;
 use PHPRocks\Util\JSON;
+use PHPRocks\Util\System;
 
 /**
  * PHP Rocks :: Fat Free Framework
@@ -21,6 +22,14 @@ class JSONTest extends Base
 
     public function testEncode() {
         $this->assertSame('["daniel"]', JSON::encode(["daniel"]));
+    }
+
+    public function testEncodePHP5_4() {
+        System::$phpVersion = function(){
+            return '5.4.37';
+        };
+        $this->assertSame('["daniel"]', JSON::encode(["daniel"]));
+        System::$phpVersion = null;
     }
 
     public function testDecodeException() {

@@ -16,7 +16,11 @@ class JSON
      * @param int $depth
      */
     public static function encode($value, $options = 0, $depth = 512){
-        $json = json_encode($value, $options, $depth);
+        if( System::phpVersionEqualsTo('5.4') ){
+            $json = json_encode($value, $options);
+        }else{
+            $json = json_encode($value, $options, $depth);
+        }
 
         if( json_last_error() !== JSON_ERROR_NONE ){
             throw new \PHPRocks\Exception\Util\JSON(var_export($value, true), 'encode', static::lastError());

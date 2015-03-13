@@ -22,11 +22,12 @@ class EnvironmentTest extends Base
 
     public function testInstance()
     {
-        $this->assertInstanceOf('\PHPRocks\Environment', Environment::instance(true));
+        $this->assertInstanceOf('\PHPRocks\Environment', Environment::instance());
     }
 
     public function testDomain(){
         $this->assertSame(Environment::UNIT_TEST, $this->environment->domain());
+        $this->assertTrue($this->environment->isIsUnitTest());
     }
 
     public function testProtocol(){

@@ -35,14 +35,13 @@ final class Environment{
     }
 
     /**
-     * @param $unit_test
      * @return \PHPRocks\Environment
      */
-    public static function instance($unit_test){
+    public static function instance(){
         $instance = DependencyManager::get(
             '\PHPRocks\Environment',
             [
-                $unit_test
+                defined('PHPUNIT_PHPRocks')
             ]
         );
 
@@ -104,10 +103,6 @@ final class Environment{
         return $protocol;
     }
 
-    public function isCommandLine(){
-        return $this->sapi_name == 'cli' || $this->is_unit_test;
-    }
-
     public function domain(){
         if( $this->is_unit_test ){
             return self::UNIT_TEST;
@@ -131,6 +126,20 @@ final class Environment{
         }
 
         return $server_name;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCommandLine(){
+        return $this->sapi_name == 'cli' || $this->is_unit_test;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isIsUnitTest() {
+        return $this->is_unit_test;
     }
 
 }
