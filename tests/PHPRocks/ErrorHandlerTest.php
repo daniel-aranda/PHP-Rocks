@@ -66,8 +66,8 @@ class ErrorHandlerTest extends Base
 
     public function testFatalError()
     {
-        $error = 'PHPRocks trapped: Allowed memory size of 262144 bytes exhausted (tried to allocate 256 bytes)';
-        $this->assertSame($error, shell_exec('php tests/fixtures/fatal-error.php'));
+        $error = 'PHPRocks trapped: Allowed memory size of 262144 bytes exhausted (tried to allocate ';
+        $this->assertContains($error, shell_exec('php tests/fixtures/fatal-error.php'));
     }
 
     public function testUndoFatalError()
