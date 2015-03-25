@@ -15,8 +15,11 @@
          timeoutForLargeTests="60"
          bootstrap="./tests/bootstrap.php">
     <testsuites>
-        <testsuite name="PHP-Rocks :: Core">
+        <testsuite name="core">
             <directory>./tests/PHPRocks</directory>
+        </testsuite>
+        <testsuite name="error">
+            <directory>./tests/errors</directory>
         </testsuite>
     </testsuites>
 
