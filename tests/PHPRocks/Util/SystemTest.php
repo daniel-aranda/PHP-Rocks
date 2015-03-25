@@ -1,6 +1,7 @@
 <?php
 namespace PHPRocks\Test;
 use PHPRocks\Util\System;
+use PHPRocks\Util\SystemMockableFunction;
 
 /**
  * PHP Rocks :: Fat Free Framework
@@ -11,33 +12,45 @@ use PHPRocks\Util\System;
 class SystemTest extends Base
 {
 
+    /**
+     * @var SystemMockableFunction
+     */
+    private $mockable;
+
     protected function setUp() {
 
+        $mock = $this->getMockBuilder('Random')
+            ->setMethods([
+                'phpversion'
+            ])
+            ->getMock();
+
+        $this->mockable = new SystemMockableFunction($mock);
     }
 
     public function testPhpVersionEqualsTo() {
 
-        $this->assertTrue(System::phpVersionEqualsTo(phpversion()));
+        $nativeFunction = new SystemMockableFunction();
+        $this->assertTrue(System::phpVersionEqualsTo(phpversion(), $nativeFunction->phpversion()));
 
     }
 
     public function testPhpVersionNotEqualsTo() {
 
-        $this->assertFalse(System::phpVersionEqualsTo('5.3'));
+        $nativeFunction = new SystemMockableFunction();
+        $this->assertFalse(System::phpVersionEqualsTo('5.3', $nativeFunction->phpversion()));
 
     }
 
     public function testPhpVersionOverwrite() {
 
-        System::$phpVersion = function(){
-            return '2054.98';
-        };
-        $this->assertSame('2054.98', System::phpVersion());
-        $this->assertNotSame(phpversion(), System::phpVersion());
-        System::$phpVersion = null;
+        $mock = $this->mockable->getMock();
+        $mock->expects($this->exactly(1))
+            ->method('phpversion')
+            ->willReturn('2054.98');
+        $this->assertTrue(System::phpVersionEqualsTo('2054.98', $mock->phpversion()));
+        $this->assertFalse(System::phpVersionEqualsTo('2054.98', phpversion()));
 
-        $this->assertNotSame('2054.98', System::phpVersion());
-        $this->assertSame(phpversion(), System::phpVersion());
     }
 
 }

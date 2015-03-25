@@ -11,7 +11,7 @@ class SystemMockableFunction
 {
 
     /**
-     * @var PHPUnit_Framework_MockObject_MockObject | null
+     * @var \PHPUnit_Framework_MockObject_MockObject | null
      */
     private $mock = null;
 
@@ -32,6 +32,14 @@ class SystemMockableFunction
             $callable = $name;
         }
         return call_user_func_array($callable, $arguments);
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    public function getMock()
+    {
+        return $this->mock;
     }
 
 }

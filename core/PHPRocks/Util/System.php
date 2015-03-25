@@ -11,20 +11,9 @@ use PHPRocks\Environment;
 class System
 {
 
-    public static $phpVersion = null;
-
-    public static function phpVersion(){
-        if( !is_callable(static::$phpVersion) ){
-            static::$phpVersion = function(){
-                return phpversion();
-            };
-        }
-        return static::$phpVersion->__invoke();
-    }
-
-    public static function phpVersionEqualsTo($version) {
+    public static function phpVersionEqualsTo($version, $current_version) {
         $version = str_replace('.', '\.', $version);
-        return !!preg_match('/^'. $version .'/', static::phpVersion());
+        return !!preg_match('/^'. $version .'/', $current_version);
     }
 
 }
