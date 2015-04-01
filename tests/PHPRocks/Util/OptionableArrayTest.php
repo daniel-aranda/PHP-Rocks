@@ -31,9 +31,9 @@ class OptionableArrayTest extends Base
     public function testGet(){
 
         $this->assertSame(5, $this->optionableArray->get('property_1'));
-        $this->assertSame(null, $this->optionableArray->get('property_2'));
+        $this->assertSame('', $this->optionableArray->get('property_2'));
         $this->assertSame(null, $this->optionableArray->get('property_3'));
-        $this->assertSame(null, $this->optionableArray->get('property_4'));
+        $this->assertSame(false, $this->optionableArray->get('property_4'));
         $this->assertSame(true, $this->optionableArray->get('property_5'));
         $this->assertSame('hi', $this->optionableArray->get('property_6'));
         $this->assertSame(0, $this->optionableArray->get('property_7'));

@@ -30,9 +30,6 @@ class OptionableArray
             return null;
         }
         $value = $this->list[$key];
-        if( $value === '' || $value === false ){
-            return null;
-        }
 
         return $value;
     }
