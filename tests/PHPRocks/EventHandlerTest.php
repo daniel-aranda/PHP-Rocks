@@ -21,7 +21,10 @@ class EventHandlerTest extends Base
         $this->event_handler = $this->getMockForTrait('PHPRocks\EventHandler');
 
         $this->listener_hook = $this->getMockBuilder('Random')
-            ->setMethods(['listener'])
+            ->setMethods([
+                'listener',
+                'listener2'
+            ])
             ->getMock();
     }
 
@@ -70,6 +73,36 @@ class EventHandlerTest extends Base
         };
 
         $this->event_handler->addEventHandler($event_name, $closure);
+
+        $this->event_handler->trigger($event_name);
+
+        $this->event_handler->removeEventHandler($event_name, $closure);
+
+        $this->event_handler->trigger($event_name);
+        $this->event_handler->trigger($event_name);
+    }
+
+    public function testRemoveEventHandlerDoesNotRemoveOthersEvents()
+    {
+
+        $this->listener_hook->expects($this->once())
+            ->method('listener');
+
+        $this->listener_hook->expects($this->exactly(3))
+            ->method('listener2');
+
+        $event_name = 'testing_event';
+
+        $closure = function(){
+            $this->listener_hook->listener();
+        };
+
+        $closure2 = function(){
+            $this->listener_hook->listener2();
+        };
+
+        $this->event_handler->addEventHandler($event_name, $closure);
+        $this->event_handler->addEventHandler($event_name, $closure2);
 
         $this->event_handler->trigger($event_name);
 

@@ -59,7 +59,7 @@ trait EventHandler
             throw new EventNotFound($event_name);
         }
 
-        $this->events = array_slice($this->events[$event_name], $index, 1);
+        array_splice($this->events[$event_name], $index, 1);
 
     }
 
