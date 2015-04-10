@@ -129,4 +129,9 @@ class EventHandlerTest extends Base
 
     }
 
+    public function testTriggerUnknownEvent()
+    {
+        $this->assertNull($this->event_handler->trigger('random_event_this'));
+    }
+
 }

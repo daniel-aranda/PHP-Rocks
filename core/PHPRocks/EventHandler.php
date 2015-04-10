@@ -33,6 +33,7 @@ trait EventHandler
             call_user_func_array($event, $arguments);
         }
 
+        return true;
     }
 
     /**
