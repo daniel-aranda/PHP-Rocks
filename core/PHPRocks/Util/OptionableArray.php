@@ -19,23 +19,52 @@ class OptionableArray
         $this->list = $list;
     }
 
-    public function set($key, $value){
-        $this->list[$key] = $value;
+    public function get($key){
 
-        return $value;
+        $keys = explode('.', $key);
+        $child = $this->list;
+
+        foreach($keys as $current_key){
+            if( !isset($child[$current_key]) ){
+                return null;
+            }
+            $child = $child[$current_key];
+        }
+
+        return $child;
+
     }
 
-    public function get($key){
-        if( !$this->has($key) ){
-            return null;
-        }
-        $value = $this->list[$key];
+    public function set($key, $value){
+        $keys = explode('.', $key);
+        $child = &$this->list;
 
-        return $value;
+        foreach($keys as $index => $current_key){
+            if( $index === count($keys) - 1 ){
+                $child[$current_key] = $value;
+            }else{
+                if( !isset($child[$current_key]) ){
+                    $child[$current_key] = [];
+                }
+                $child = &$child[$current_key];
+            }
+        }
+
+        return true;
     }
 
     public function has($key){
-        return array_key_exists($key, $this->list);
+        $keys = explode('.', $key);
+        $child = $this->list;
+
+        foreach($keys as $current_key){
+            if( !array_key_exists($current_key, $child) ){
+                return false;
+            }
+            $child = $child[$current_key];
+        }
+
+        return true;
     }
 
     public function source(){

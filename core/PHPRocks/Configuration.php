@@ -5,6 +5,7 @@ use PHPRocks\Exception\Configuration\ValueNotSet;
 use PHPRocks\Exception\Configuration\InvalidEnvironment;
 use PHPRocks\Exception\Configuration\EnvironmentNotFound;
 use PHPRocks\Util\JSON;
+use PHPRocks\Util\OptionableArray;
 
 /**
  * PHP Rocks :: Fat Free Framework
@@ -15,7 +16,7 @@ use PHPRocks\Util\JSON;
 final class Configuration{
 
     /**
-     * @var array
+     * @var OptionableArray
      */
     private $data;
 
@@ -86,7 +87,8 @@ final class Configuration{
 
         $file_content = file_get_contents($this->path);
 
-        $this->data = JSON::decode($file_content, true);
+        $data = JSON::decode($file_content, true);
+        $this->data = new OptionableArray($data);
     }
 
     public function environment(){
@@ -117,36 +119,16 @@ final class Configuration{
 
     public function get($key){
 
-        $keys = explode('.', $key);
-        $child = $this->data;
-
-        foreach($keys as $current_key){
-            if( !isset($child[$current_key]) ){
-                throw new ValueNotSet($key);
-            }
-            $child = $child[$current_key];
+        if( !$this->data->has($key) ){
+            throw new ValueNotSet($key);
         }
 
-        return $child;
+        return $this->data->get($key);
 
     }
 
     public function set($key, $value){
-        $keys = explode('.', $key);
-        $child = &$this->data;
-
-        foreach($keys as $index => $current_key){
-            if( $index === count($keys) - 1 ){
-                $child[$current_key] = $value;
-            }else{
-                if( !isset($child[$current_key]) ){
-                    $child[$current_key] = [];
-                }
-                $child = &$child[$current_key];
-            }
-        }
-
-        return true;
+        return $this->data->set($key, $value);
     }
 
     public function getPerEnvironment($key, $environment = null){
