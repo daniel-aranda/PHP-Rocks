@@ -101,10 +101,10 @@ final class Environment{
             return self::CLI;
         }
 
-        $server_name = $this->server->get("SERVER_NAME");
+        $server_name = $this->server->get('HTTP_HOST');
 
         if( is_null($server_name) ){
-            $server_name = $this->server->get("HTTP_HOST");
+            $server_name = $this->server->get('SERVER_NAME');
         }
 
         if( is_null($server_name) ){
