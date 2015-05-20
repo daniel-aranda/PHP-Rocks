@@ -62,7 +62,7 @@ class EnvironmentTest extends Base
         );
 
         $this->assertSame('cmd', $environment->protocol());
-        $this->assertSame('cli', $environment->domain());
+        $this->assertSame(gethostname(), $environment->domain());
     }
 
     public function testNotDomain(){
@@ -106,7 +106,7 @@ class EnvironmentTest extends Base
         );
 
         $this->assertSame('cmd', $environment->protocol());
-        $this->assertSame('lili.com', $environment->domain());
+        $this->assertSame(gethostname(), $environment->domain());
     }
 
     public function testAll(){
