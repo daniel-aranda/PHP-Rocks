@@ -98,11 +98,28 @@ final class Configuration{
 
     private function findEnvironment($domain){
 
+        try{
+            $environment = $this->locateEnvironment($domain);
+        }catch (EnvironmentNotFound $exception){
+            if( !$this->environment->isCommandLine() ){
+                $hostname = gethostname();
+                $environment = $this->locateEnvironment($hostname);
+            }else{
+                throw $exception;
+            }
+        }
+
+        return $environment;
+
+    }
+
+    private function locateEnvironment($name){
+
         $environments = $this->get('environments');
 
         foreach($environments as $environment => $server_names){
 
-            if( in_array($domain, $server_names) ){
+            if( in_array($name, $server_names) ){
 
                 if( !Environment::isValid($environment) ){
                     throw new InvalidEnvironment($environment);
@@ -113,7 +130,7 @@ final class Configuration{
 
         }
 
-        throw new EnvironmentNotFound($domain);
+        throw new EnvironmentNotFound($name);
 
     }
 
