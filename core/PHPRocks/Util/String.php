@@ -22,5 +22,17 @@ class String
         }, $string);
     }
 
+    /**
+     * @param $string
+     * @param $needle
+     * @return bool
+     */
+    public static function contains($string, $needle, $ignore_case = false){
+        if( $ignore_case ){
+            return stripos($string, $needle) !== false;
+        }else{
+            return strpos($string, $needle) !== false;
+        }
+    }
 
 }

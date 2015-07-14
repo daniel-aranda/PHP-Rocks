@@ -21,4 +21,13 @@ class StringTest extends Base
         $this->assertSame('DanielTest2', String::underscoreToCamelCase('daniel_test_2'));
     }
 
+    public function testContains() {
+        $this->assertTrue(String::contains('daniel test', 'test'));
+        $this->assertTrue(String::contains('daniel test', 'daniel'));
+        $this->assertTrue(String::contains('daniel test', ' '));
+        $this->assertFalse(String::contains('some test', 'daniel'));
+        $this->assertFalse(String::contains('some test', 'Test'));
+        $this->assertTrue(String::contains('some test', 'Test', true));
+    }
+
 }
